@@ -1,7 +1,7 @@
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 from typing import List, Optional
-# código é apenas um esboço muito simples
+# O CÓDIGO NO MOMENTO É APENAS UM ESBOÇO MUITO SIMPLES
 app = FastAPI()
 
 # Modelo de dados, (pro schemas.py)
