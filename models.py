@@ -1,6 +1,7 @@
 # modelo das tabelas do banco de dados, com as 
 # classes(tabelas) User(*ID, email, hash) 
 # e Task(*ID, titulo, concluída ou não, ID do usuário dono)
+
 import sqlalchemy as sqla
 from sqlalchemy.orm import relationship
 # import da base em database.py
@@ -26,5 +27,8 @@ class Task(Base):
     title = sqla.Column(sqla.String, index=True, nullable=False)
     description = sqla.Column(sqla.String, nullable=True)
     completed = sqla.Column(sqla.Boolean, default=False)
+    # conecta com a chave estrangeira da tabela de usuários para saber o dono da nota
+    owner_id = sqla.Column(sqla.Integer, sqla.ForeignKey("users.id"))
 
-    
+    # o outro lado ad conexão da relação entre tasks e owner
+    owner = relationship("User", back_populates="tasks")

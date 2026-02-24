@@ -22,7 +22,7 @@ Uma API de gerenciamento de tarefas (To-Do List) desenvolvida com FastAPI para c
 
     Pydantic (Validação de dados)
 
-    SQLAlchemy (Banco de dados simplificado)
+    SQLAlchemy e SQLite (Banco de dados simplificado)
 
     passlib[bcrypt] (segurança das senhas por hashing)
 
