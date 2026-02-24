@@ -1,6 +1,7 @@
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 from typing import List, Optional
+# rodar servidor: "fastapi dev main.py" ou "uvicorn main:app --reload"
 # O CÓDIGO NO MOMENTO É APENAS UM ESBOÇO MUITO SIMPLES
 app = FastAPI()
 
@@ -57,7 +58,7 @@ def create_task(task: Task, token: str = "Exemplo-token-123"):
         raise HTTPException(status_code=401, detail="Unauthoraized")
     
     # salva a tarefa (lógica só pra teste)
-    new_task = task.dict()
+    new_task = task.model_dump()
     new_task["id"] = len(task_bank) + 1
     task_bank.append(new_task)
 
