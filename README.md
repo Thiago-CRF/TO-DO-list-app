@@ -12,20 +12,20 @@ Uma API de gerenciamento de tarefas (To-Do List) desenvolvida com FastAPI para c
 
     Isolamento de Dados: Filtro para que o usuário veja apenas as suas próprias tarefas.
 
-- Bibliotecas utilizadas:
-
-    Python 3.13
+- Bibliotecas utilizadas(Utilizado python 3.13):
 
     FastAPI (Framework web)
 
     uvicorn (servidor web ASGI para requisições HTTP)
 
-    Pydantic (Validação de dados)
+    Pydantic (Validação de dados para as classes)
 
-    SQLAlchemy e SQLite (Banco de dados simplificado)
+    SQLAlchemy e SQLite (ORM e Banco de dados simplificado)
 
     passlib[bcrypt] (segurança das senhas por hashing)
 
     python-jose[cryptography] (Token JWT)
 
-    python-multipart (Permite requisições form-data prao FastAPI)
+    python-multipart (Permite requisições form-data(da web, pro login) para o FastAPI)
+
+    python-dotenv (Para leitura do arquivo .env que tem a chave 32bytes pra autenticação da API)
