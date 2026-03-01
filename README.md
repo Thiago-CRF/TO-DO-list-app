@@ -1,31 +1,33 @@
+# TO-DO list API - FastAPI
+
 Uma API de gerenciamento de tarefas (To-Do List) desenvolvida com FastAPI para colocar em prática conceitos de autenticação, segurançae uso de API em Python.
 
-- Funcionalidades principais:
+## Funcionalidades principais:
 
-    Cadastro de Usuários: Criação de conta com armazenamento de senhas com hashing
+- **Cadastro de Usuários:** Criação de conta com armazenamento de senhas com hashing
 
-    Autenticação JWT: Sistema de login que gera um token JWT de acesso para sessões seguras.
+- **Autenticação JWT:** Sistema de login que gera um token JWT de acesso para sessões seguras.
 
-    CRUD de Tarefas: Criar, ler, editar e excluir tarefas.
+- **CRUD de Tarefas:** Criar, ler, editar e excluir tarefas.
 
-    Proteção de Rotas: Apenas usuários autenticados podem interagir com a API.
+- **Proteção de Rotas:** Apenas usuários autenticados podem interagir com a API.
 
-    Isolamento de Dados: Filtro para que o usuário veja apenas as suas próprias tarefas.
+- **Isolamento de Dados:** Filtro para que o usuário veja apenas as suas próprias tarefas.
 
-- Bibliotecas utilizadas(Utilizado python 3.13):
+## Bibliotecas utilizadas (Utilizado python 3.13):
 
-    FastAPI (Framework web)
+- **FastAPI** (Framework web)
 
-    uvicorn (servidor web ASGI para requisições HTTP)
+- **uvicorn** (servidor web ASGI para requisições HTTP)
 
-    Pydantic (Validação de dados para as classes)
+- **Pydantic** (Validação de dados para as classes)
 
-    SQLAlchemy e SQLite (ORM e Banco de dados simplificado)
+- **SQLAlchemy e SQLite** (ORM e Banco de dados simplificado)
 
-    passlib[bcrypt] (segurança das senhas por hashing), versão 3.2.2
+- **passlib[bcrypt]** (segurança das senhas por hashing), versão 3.2.2
 
-    python-jose[cryptography] (Token JWT)
+- **python-jose[cryptography]** (Token JWT)
 
-    python-multipart (Permite requisições form-data(da web, pro login) para o FastAPI)
+- **python-multipart** (Permite requisições form-data(da web, pro login) para o FastAPI)
 
-    python-dotenv (Para leitura do arquivo .env que tem a chave 32bytes pra autenticação da API)
+- **python-dotenv** (Para leitura do arquivo .env que tem a chave 32bytes pra autenticação da API)
