@@ -16,7 +16,7 @@ if not SECRET_KEY:
     raise ValueError("A SECRET_KEY não foi encontrado no .env")
 
 ALGORITHM = "HS256"
-ACCESS_JWT_EXPIRE_MIN = 60
+ACCESS_JWT_EXPIRE_MIN = 45
 
 # usa o algoritimo bcrypt pra criptografar
 pwd_context = CryptContext(schemes=["bcrypt"])

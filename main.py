@@ -25,28 +25,26 @@ def get_db():
 oauth2_scheme = OAuth2PasswordBearer("login")
 
 # verificação do tokenJWT do usuário, para quando requisitar ou salvar as tarefas na lista
-def get_current_user(token: str = Depends(oauth2_scheme), 
-                     db: Session = Depends(get_db)):
-    credential_exception = HTTPException(
-        status_code=status.HTTP_401_UNAUTHORIZED,
-        detail="Crachá de credenciais inválido ou expirado",
-        headers={"WWW-Authenticate": "Bearer"})
-
+def get_current_user(token: str = Depends(oauth2_scheme), db: Session = Depends(get_db)):
     # tenta ler o token com a chave da API, sobe erro se o token estiver errado ou não tiver email no cabeçalho
     try:
-        payload = jwt.decode(token, auth.SECRET_KEY, auth.ALGORITHM)
+        payload = jwt.decode(token, auth.SECRET_KEY, algorithms=auth.ALGORITHM)
         email: str = payload.get("sub")
 
-        if email == None:
-            raise credential_exception
-    except JWTError:
-        raise credential_exception
-    
+        if email is None:
+            raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED,
+                                detail="Crachá vazio, sem campo sub")
+
+    except JWTError as real_error:
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED,
+                                detail=f"Diagnśotico do token: {str(real_error)}")
+        
     # se o token for valido, busca o usuário dono do email e retorna o usuário
     user = db.query(models.User).filter(models.User.email == email).first()
 
-    if user == None:
-        raise credential_exception
+    if user is None:
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED,
+                                detail=f"Diagnśotico: E-mail: '{email}' não encontrado no banco de dados")
     return user
 
 # rotas publicas da API
@@ -99,7 +97,7 @@ def list_tasks(db: Session = Depends(get_db), current_user: models.User = Depend
     tasks = db.query(models.Task).filter(models.Task.owner_id == current_user.id).all()
     return tasks
 
-@app.post("/tasks")
+@app.post("/tasks", response_model=schemas.Task)
 def create_task(task: schemas.CreateTask, db: Session = Depends(get_db), current_user: models.User = Depends(get_current_user)):
     """Rota protegida. Cria uma tarefa na lista, ligada ao ID do usuário logado"""
     # ** antes de task.model_dump() faz com que ele transforme automaticamente 

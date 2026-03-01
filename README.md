@@ -22,7 +22,7 @@ Uma API de gerenciamento de tarefas (To-Do List) desenvolvida com FastAPI para c
 
     SQLAlchemy e SQLite (ORM e Banco de dados simplificado)
 
-    passlib[bcrypt] (segurança das senhas por hashing)
+    passlib[bcrypt] (segurança das senhas por hashing), versão 3.2.2
 
     python-jose[cryptography] (Token JWT)
 
