@@ -42,11 +42,31 @@ def get_current_user(token: str = Depends(oauth2_scheme),
     except JWTError:
         raise credential_exception
     
-    # se o token for valido, busca o usuário dono do email
+    # se o token for valido, busca o usuário dono do email e retorna o usuário
     user = db.query(models.User).filter(models.User.email == email).first()
 
+    if user == None:
+        raise credential_exception
+    return user
 
 # rotas da API
+@app.post("/users",response_model=schemas.User)
+def create_user(user: schemas.CreateUser, db: Session = Depends(get_db)):
+    # cancela a operação e sobe um erro se o email já estiver cadastrado
+    db_user = db.query(models.User).filter(models.User.email == user.email).first()
+    if db_user:
+        raise HTTPException(400, "E-mail já cadastrado")
+    
+    #hash da senha e criação do usuário
+    password_hash = auth.get_password_hash(user.password)
+
+    new_user = models.User(email=user.email, hash_password=password_hash)
+    db.add(new_user)
+    db.commit()
+    db.refresh(new_user)
+
+    return new_user
+
 @app.get("/")
 def home():
     """Rota publica de teste pra API"""
