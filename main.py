@@ -1,24 +1,22 @@
-from fastapi import FastAPI, HTTPException
-from pydantic import BaseModel
-from typing import List, Optional
 # rodar servidor: "fastapi dev main.py" ou "uvicorn main:app --reload"
-# O CÓDIGO NO MOMENTO É APENAS UM ESBOÇO MUITO SIMPLES
+
+from fastapi import FastAPI, HTTPException
+from sqlalchemy.orm import Session
+
+import models, schemas, authentication, database
+
+# inicia banco de dados(usando os outros arquivos) e api
+models.Base.metadata.create_all(bind=database.engine)
 app = FastAPI()
 
-# Modelo de dados, (pro schemas.py)
-# pra o fastAPI saber o que esperar do usuári oe o que devolver
-class UserLogin(BaseModel):
-    email: str
-    password: str
-
-class Task(BaseModel):
-    id: Optional[int] = None
-    title: str
-    description: str
-    done: bool = False
-
-# banco de dados, (que vai ser substituido pelo SQLAlchemy)
-task_bank = []
+# cria sessão temporaria do banco de dados
+def get_db():
+    db = database.SessionLocal()
+    try:
+        #yield cria uma nova sessão sempre que for chamado. return retornaria a mesma sessão
+        yield db 
+    finally:
+        db.close()
 
 # exemplo de dependencias de segurança,
 # (que vai virar o decoder do token JWT real)
