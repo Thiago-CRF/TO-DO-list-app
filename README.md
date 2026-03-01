@@ -41,6 +41,7 @@ cd TO-DO-list-app
 ```
 
 **2. Crie e ative um ambiente virtual:**
+
 Rode no terminal:
 ```bash
 python -m venv .venv
