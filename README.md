@@ -61,7 +61,8 @@ pip install fastapi uvicorn pydantic sqlalchemy passlib "bcrypt==3.2.2" "python-
 ```
 
 **4. Configure as variáveis de ambiente:**
-Crie uma chave rodando no terminal, rodando:
+
+Crie uma chave rodando esse comando no terminal:
 ```bash
 python -c "import secrets; print(secrets.token_hex(32))"
 ```
@@ -69,7 +70,8 @@ Crie um arquivo chamado .env na pasta do projeto e adicione a chave 32 bytes cri
 SECRET_KEY="chave_32_bytes_criada"
 
 **5. Inicie o servidor:**
-rode no terminal:
+
+Rode no terminal:
 ```bash
 uvicorn main:app --reload
 ```
