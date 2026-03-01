@@ -1,13 +1,16 @@
 # rodar servidor: "fastapi dev main.py" ou "uvicorn main:app --reload"
 
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Depends, status
 from sqlalchemy.orm import Session
+from fastapi.security import OAuth2PasswordBearer
+from jose import jwt, JWTError
 
-import models, schemas, authentication, database
+import models, schemas, database
+import authentication as auth
 
 # inicia banco de dados(usando os outros arquivos) e api
 models.Base.metadata.create_all(bind=database.engine)
-app = FastAPI()
+app = FastAPI(title="TO-DO list API")
 
 # cria sessão temporaria do banco de dados
 def get_db():
@@ -18,13 +21,31 @@ def get_db():
     finally:
         db.close()
 
-# exemplo de dependencias de segurança,
-# (que vai virar o decoder do token JWT real)
-def loged_user(token: str):
-    if token != "Exemplo-token-123":
-        raise HTTPException(status_code=400, detail="Invalid token")
-    return {"id": 1, "name": "you"}
+# esquema de autenticação que diz ao fastAPI que o token pro login é na rota /login
+oauth2_scheme = OAuth2PasswordBearer("login")
+
+# verificação do tokenJWT do usuário
+def get_current_user(token: str = Depends(oauth2_scheme), 
+                     db: Session = Depends(get_db)):
+    credential_exception = HTTPException(
+        status_code=status.HTTP_401_UNAUTHORIZED,
+        detail="Crachá de credenciais inválido ou expirado",
+        headers={"WWW-Authenticate": "Bearer"})
+
+    # tenta ler o token com a chave da API, sobe erro se o token estiver errado ou não tiver email no cabeçalho
+    try:
+        payload = jwt.decode(token, auth.SECRET_KEY, auth.ALGORITHM)
+        email: str = payload.get("sub")
+
+        if email == None:
+            raise credential_exception
+    except JWTError:
+        raise credential_exception
     
+    # se o token for valido, busca o usuário dono do email
+    user = db.query(models.User).filter(models.User.email == email).first()
+
+
 # rotas da API
 @app.get("/")
 def home():
