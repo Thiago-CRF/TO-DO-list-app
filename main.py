@@ -84,8 +84,8 @@ def login(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depend
                             "E-mail ou senha incorretos",
                             {"WWW-Authenticate": "Bearer"})
 
-    acess_token = auth.create_JWT_token(data={"sub": user.email})    
-    return {"acess_token": acess_token, "token_type": "bearer"}
+    access_token = auth.create_JWT_token(data={"sub": user.email})    
+    return {"access_token": access_token, "token_type": "bearer"}
 
 
 # rotas privadas (precisa do tokenJWT)

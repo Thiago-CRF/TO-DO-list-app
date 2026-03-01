@@ -8,7 +8,7 @@ class TaskBase(BaseModel):
 # modelo base das tarefas
     title: str
     description: Optional[str] = None
-    done: bool = False
+    completed: bool = False
 
 class CreateTask(TaskBase):
 # modelo que o usuário envia no POST de tarefas
