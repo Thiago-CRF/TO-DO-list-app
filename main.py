@@ -109,3 +109,25 @@ def create_task(task: schemas.CreateTask, db: Session = Depends(get_db), current
     db.refresh(new_task)
    
     return new_task
+
+@app.put("/tasks/{task_id}", response_model=schemas.Task)
+def update_task(task_id: int, task_update: schemas.CreateTask,
+                db: Session = Depends(get_db), 
+                current_user: models.User = Depends(get_current_user)):
+    # busca a tarefa no bd
+    db_task = db.query(models.Task).filter(models.Task.id == task_id).first()
+    if db_task is None:
+        raise HTTPException(status.HTTP_404_NOT_FOUND, detail="Tarefa não encontrada")
+
+    if db_task.owner_id != current_user.id:
+        raise HTTPException(status.HTTP_403_FORBIDDEN, detail="Usuário não autorizado para edição da tarefa")
+    
+    # atualiza copiando o que veio do swagger para o banco
+    db_task.title = task_update.title
+    db_task.description = task_update.description
+    db_task.completed = task_update.completed
+    
+    db.commit()
+    db.refresh(db_task)
+
+    return db_task
