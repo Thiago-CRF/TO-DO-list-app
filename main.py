@@ -131,3 +131,22 @@ def update_task(task_id: int, task_update: schemas.CreateTask,
     db.refresh(db_task)
 
     return db_task
+
+# retorna 204 pois não tem o que retornar, a tarefa foi deletada
+@app.delete("/tasks/{task_id}", status_code=status.HTTP_204_NO_CONTENT)
+def delete_task(task_id: int, db: Session = Depends(get_db), 
+                current_user: models.User = Depends(get_current_user)):
+    # busca a tarefa no bd
+    db_task = db.query(models.Task).filter(models.Task.id == task_id).first()
+
+    if db_task is None:
+        raise HTTPException(status.HTTP_404_NOT_FOUND, detail="Tarefa não encontrada")
+
+    if db_task.owner_id != current_user.id:
+        raise HTTPException(status.HTTP_403_FORBIDDEN, detail="Usuário não autorizado para edição da tarefa")
+    
+    # deleta do banco de dados e salva
+    db.delete(db_task)
+    db.commit()
+
+    return
