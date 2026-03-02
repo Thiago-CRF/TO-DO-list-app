@@ -44,7 +44,7 @@ cd TO-DO-list-app
 
 Rode no terminal:
 ```bash
-python -m venv .venv
+python3.13 -m venv .venv
 ```
 E depois, no linux ou mac:
 ```bash
