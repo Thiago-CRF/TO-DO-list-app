@@ -126,6 +126,7 @@ def update_task(task_id: int, task_update: schemas.CreateTask,
     db_task.title = task_update.title
     db_task.description = task_update.description
     db_task.completed = task_update.completed
+    db_task.due_date = task_update.due_date
     
     db.commit()
     db.refresh(db_task)

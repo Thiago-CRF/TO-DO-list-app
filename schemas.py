@@ -3,12 +3,14 @@
 
 from pydantic import BaseModel, ConfigDict
 from typing import List, Optional
+from datetime import datetime
 
 class TaskBase(BaseModel):
 # modelo base das tarefas
     title: str
     description: Optional[str] = None
     completed: bool = False
+    due_date: Optional[datetime] = None
 
 class CreateTask(TaskBase):
 # modelo que o usuário envia no POST de tarefas
@@ -18,6 +20,7 @@ class Task(TaskBase):
 # modelo que a API devolve ao usuário, com todas as informações
     id: int
     owner_id: int
+    creation_date: Optional[datetime] = None
     
     model_config = ConfigDict(from_attributes=True) 
     # config de conexão com o SQLalchemy, pra ler objetos de banco de dados

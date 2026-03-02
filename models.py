@@ -4,6 +4,7 @@
 
 import sqlalchemy as sqla
 from sqlalchemy.orm import relationship
+from datetime import datetime #função da hora do banco
 # import da base em database.py
 from database import Base
 
@@ -29,6 +30,10 @@ class Task(Base):
     completed = sqla.Column(sqla.Boolean, default=False)
     # conecta com a chave estrangeira da tabela de usuários para saber o dono da nota
     owner_id = sqla.Column(sqla.Integer, sqla.ForeignKey("users.id"))
+
+    # armazena a data automaticamente, usando datetime.datetime padrão do python
+    creation_date = sqla.Column(sqla.DateTime, default=datetime.now)
+    due_date = sqla.Column(sqla.DateTime, nullable=True)
 
     # o outro lado ad conexão da relação entre tasks e owner
     owner = relationship("User", back_populates="tasks")
