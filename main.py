@@ -153,7 +153,7 @@ def delete_task(task_id: int, db: Session = Depends(get_db),
     return
 
 # deleta o usuário, se o email e a senha que ele colocar forem certas. E todas as suas tarefas
-@app.delete("/user", status_code=status.HTTP_204_NO_CONTENT)
+@app.delete("/user/del", status_code=status.HTTP_204_NO_CONTENT)
 def delete_current_user(form_data: OAuth2PasswordRequestForm = Depends(), 
                         db: Session = Depends(get_db),
                         current_user: models.User = Depends(get_current_user)):
@@ -165,10 +165,9 @@ def delete_current_user(form_data: OAuth2PasswordRequestForm = Depends(),
                             "E-mail ou senha incorretos",
                             {"WWW-Authenticate": "Bearer"})
 
-    user_tasks = db.query(models.Task).filter(models.Task.owner_id == current_user.id).all()
+    # filtra as tasks do usuario e deleta direto de uma vez
+    db.query(models.Task).filter(models.Task.owner_id == current_user.id).delete()
 
-    for tasks in user_tasks:
-        db.delete(tasks)
     db.delete(current_user)
     db.commit()
 
