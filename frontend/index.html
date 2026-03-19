@@ -18,9 +18,22 @@
         </div>
 
         <div id="todo-section" style="display: none;">
-            <div class="add-task">
-                <input type="text" id="new-task-title" placeholder="Nova tarefa...">
-                <button onclick="createTask()">Adicionar</button>
+            <div class="add-task-form">
+                <h3>Criar Nova Tarefa</h3>
+                
+                <input type="text" id="new-task-title" placeholder="O que você precisa fazer? (Obrigatório)" required>
+                
+                <textarea id="new-task-desc" placeholder="Detalhes ou descrição (Opcional)" rows="3"></textarea>
+                
+                <div class="date-input-group">
+                    <label>Prazo (Opcional):</label>
+                    <div style="display: flex; gap: 10px;">
+                        <input type="date" id="new-task-date"> 
+                        <input type="time" id="new-task-time"> 
+                    </div>
+                </div>
+                
+                <button onclick="createTask()">Adicionar Tarefa</button>
             </div>
             
             <ul id="task-list">

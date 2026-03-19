@@ -51,3 +51,102 @@ li {
     margin-bottom: 20px;
 }
 .add-task button { width: auto; padding: 12px 20px; }
+/* Esta é a classe que adicionamos na "caixa principal" no JavaScript */
+.task-card {
+    background: #ffffff;
+    border: 1px solid #e0e0e0;
+    border-left: 5px solid #007bff; /* Uma bordinha azul charmosa na esquerda */
+    border-radius: 8px; /* Cantos arredondados */
+    padding: 15px; /* Espaço interno para o texto não colar nas bordas */
+    margin-bottom: 15px; /* Espaço entre um cartão e o debaixo */
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05); /* Uma sombrinha leve de fundo */
+}
+
+/* Como o Título vai se comportar dentro do cartão */
+.task-card h3 {
+    margin: 0 0 8px 0; /* Remove a margem do topo, adiciona embaixo */
+    color: #333333;
+    font-size: 18px;
+    text-align: left; /* Garante que o título fique alinhado à esquerda */
+}
+
+/* Como a Descrição vai se comportar */
+.task-card p {
+    margin: 0 0 15px 0;
+    color: #666666; /* Um cinza mais suave que o título */
+    font-size: 14px;
+    line-height: 1.4; /* Espaçamento entre as linhas do texto */
+}
+
+/* A gaveta inferior com as datas e status */
+.task-details {
+    display: flex; /* Transforma a div num modelo flexível */
+    justify-content: space-between; /* Empurra os itens para se espalharem na linha */
+    align-items: center;
+    font-size: 12px;
+    color: #555555;
+    background-color: #f9f9f9; /* Um fundo cinza bem clarinho */
+    padding: 10px;
+    border-radius: 5px;
+    flex-wrap: wrap; /* Se a tela for de celular, ele joga o que não couber para a linha de baixo */
+    gap: 10px;
+}
+
+.task-details strong {
+    color: #000; /* Deixa o texto do status um pouco mais escuro */
+}
+
+.delete-btn {
+    background-color: #ff4d4d; /* Vermelho claro */
+    color: white;
+    margin-top: 15px; /* Espaço para não grudar nas datas */
+    padding: 8px; /* Deixa ele um pouquinho mais fino que os botões principais */
+    font-size: 14px;
+}
+
+.delete-btn:hover {
+    background-color: #cc0000; /* Vermelho escuro quando o mouse passa por cima */
+}
+
+
+.add-task-form {
+    background: #ffffff;
+    padding: 20px;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    margin-bottom: 25px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.add-task-form h3 {
+    margin-top: 0;
+    margin-bottom: 15px;
+    font-size: 16px;
+    color: #444;
+}
+
+/* Deixa a área de descrição com a mesma cara dos inputs */
+textarea {
+    width: 100%;
+    padding: 12px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+    resize: vertical; /* Permite que o usuário estique a caixa apenas para baixo */
+}
+
+/* Organiza o campo de data */
+.date-input-group {
+    display: flex;
+    flex-direction: column; /* Coloca o texto em cima do calendário */
+    margin-bottom: 15px;
+}
+
+.date-input-group label {
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 5px;
+    font-weight: bold;
+}

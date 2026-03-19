@@ -9,6 +9,7 @@ from jose import jwt, JWTError
 
 import models, schemas, database
 import authentication as auth
+import datetime
 
 # inicia banco de dados(usando os outros arquivos) e api
 models.Base.metadata.create_all(bind=database.engine)
@@ -114,7 +115,18 @@ def create_task(task: schemas.CreateTask, db: Session = Depends(get_db), current
     # ** antes de task.model_dump() faz com que ele transforme automaticamente 
     # todas as cháves do dicionário em variáveis, quando o model_dump transforma
     # do formato do pydantic em dicionario python padrão
-    new_task = models.Task(**task.model_dump(), owner_id=current_user.id)
+    task_data = task.model_dump()
+
+    if task_data.get("due_date"):
+        # Se por acaso a data veio vazia ou estranha, garantimos que seja um objeto datetime
+        if isinstance(task_data["due_date"], str):
+            try:
+                # Remove o 'T' que o navegador envia e converte para objeto datetime
+                task_data["due_date"] = datetime.fromisoformat(task_data["due_date"].replace('Z', ''))
+            except ValueError:
+                task_data["due_date"] = None
+
+    new_task = models.Task(**task_data, owner_id=current_user.id)
     db.add(new_task)
     db.commit()
     db.refresh(new_task)
