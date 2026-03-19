@@ -1,8 +1,10 @@
 # rodar servidor: "fastapi dev main.py" ou "uvicorn main:app --reload"
 
 from fastapi import FastAPI, HTTPException, Depends, status
-from sqlalchemy.orm import Session
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
+from fastapi.middleware.cors import CORSMiddleware
+
+from sqlalchemy.orm import Session
 from jose import jwt, JWTError
 
 import models, schemas, database
@@ -11,6 +13,15 @@ import authentication as auth
 # inicia banco de dados(usando os outros arquivos) e api
 models.Base.metadata.create_all(bind=database.engine)
 app = FastAPI(title="TO-DO list API")
+
+# permite que qualquer site acesse a API (para testes/portfólio)
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"], # trocar por ["https://seu-site.com"] em produção
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 # cria sessão temporaria do banco de dados
 def get_db():
