@@ -1,4 +1,4 @@
-# rodar servidor: "fastapi dev main.py" ou "uvicorn main:app --reload"
+# rodar servidor: "fastapi dev main.py" ou melhor "uvicorn main:app --reload"
 
 from fastapi import FastAPI, HTTPException, Depends, status
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm

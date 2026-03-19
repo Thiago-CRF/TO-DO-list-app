@@ -15,7 +15,10 @@ SECRET_KEY = os.getenv("SECRET_KEY")
 if not SECRET_KEY:
     raise ValueError("A SECRET_KEY não foi encontrado no .env")
 
-ALGORITHM = "HS256"
+ALGORITHM = os.getenv("ALGORITHM_JWT")
+if not ALGORITHM:
+    raise ValueError("O ALGORITHM_JWT não foi encontrado no .env")
+
 ACCESS_JWT_EXPIRE_MIN = 45
 
 # usa o algoritimo bcrypt pra criptografar
