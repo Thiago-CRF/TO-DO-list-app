@@ -150,3 +150,51 @@ textarea {
     margin-bottom: 5px;
     font-weight: bold;
 }
+
+/* Cria uma linha flexível para deixar o checkbox e o título lado a lado */
+.task-header {
+    display: flex;
+    align-items: center; /* Centraliza na vertical */
+    gap: 12px; /* Espacinho entre a caixa e o texto */
+    margin-bottom: 8px;
+}
+
+/* O título dentro do cabeçalho não precisa mais da margem original */
+.task-header h3 {
+    margin: 0;
+}
+
+/* Deixa o checkbox um pouco maior para facilitar o clique */
+.task-checkbox {
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+    margin: 0; /* Remove a margem gigante que colocamos nos inputs padrão */
+    padding: 0;
+}
+
+/* O Efeito visual de quando a tarefa está concluída */
+.completed-title {
+    text-decoration: line-through; /* Risca o texto */
+    color: #999999 !important; /* Deixa o texto cinza clarinho */
+}
+
+/* Se a tarefa estiver concluída, a borda lateral fica verde e o cartão meio transparente */
+.task-card.completed-card {
+    border-left: 5px solid #28a745;
+    background-color: #fcfcfc;
+    opacity: 0.8;
+}
+
+
+.task-details span {
+    text-align: center;
+    line-height: 1.4; /* Dá um espacinho extra entre a linha de cima e a de baixo */
+}
+
+/* Deixa a hora um pouco mais discreta do que a data */
+.hora-detalhe {
+    color: #777;
+    font-size: 11px;
+    font-weight: bold;
+}

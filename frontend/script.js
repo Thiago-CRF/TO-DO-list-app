@@ -45,57 +45,74 @@ async function loadTasks() {
             const li = document.createElement('li');
             li.className = 'task-card'; // Damos um "nome" para o CSS poder pintar depois
 
-            // 2. Criamos o Título (Tag <h3> significa Cabeçalho nível 3)
+            const headerDiv = document.createElement('div');
+            headerDiv.className = 'task-header';
+
+            const checkbox = document.createElement('input');
+            checkbox.type = 'checkbox';
+            checkbox.className = 'task-checkbox';
+            checkbox.checked = task.completed; // Marca se já veio concluída do banco
+            
+            // Quando alguém clicar na caixa, chama a nossa função nova passando a tarefa inteira
+            checkbox.onchange = () => toggleTaskStatus(task); 
+
             const titleElement = document.createElement('h3');
             titleElement.textContent = task.title;
 
-            // 3. Criamos a Descrição (Tag <p> significa Parágrafo)
+            // Se a tarefa já está concluída, adicionamos os estilos visuais
+            if (task.completed) {
+                titleElement.classList.add('completed-title'); // Risca o título
+                li.classList.add('completed-card'); // Deixa a borda verde
+            }
+
+            // Colocamos o checkbox e o título dentro da caixinha de cabeçalho
+            headerDiv.appendChild(checkbox);
+            headerDiv.appendChild(titleElement);
+
+            // 3. Criamos a Descrição
             const descElement = document.createElement('p');
-            // Se a tarefa não tiver descrição, colocamos um texto padrão
             descElement.textContent = task.description ? task.description : "Sem descrição detalhada."; 
 
             // 4. Criamos uma "gaveta" (div) para os detalhes menores
             const detailsDiv = document.createElement('div');
             detailsDiv.className = 'task-details';
 
-            // O Python manda a data assim: "2026-03-19T14:30:00"
-            // Nós usamos o "new Date()" do JavaScript para transformar isso em "19/03/2026"
-            const dataCriacao = task.creation_date 
-                ? new Date(task.creation_date).toLocaleDateString('pt-BR') 
-                : 'Data desconhecida';
-            
-            // Nota: Estou assumindo que a coluna no seu banco se chama 'due_date'. 
-            // Se for outro nome, mude aqui!
-            const dataEntrega = task.due_date 
-                ? new Date(task.due_date).toLocaleDateString('pt-BR') 
-                : 'Sem prazo';
+            function formatarDataHora(dataString) {
+                if (!dataString) return 'Sem prazo';
+                const d = new Date(dataString);
+                const data = d.toLocaleDateString('pt-BR'); // Ex: 20/03/2026
+                const hora = d.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }); // Ex: 15:30
+                
+                // Retorna a data, quebra a linha (<br>) e coloca a hora um pouco menor (<small>)
+                return `${data}<br><small class="hora-detalhe">🕒 ${hora}</small>`;
+            }
 
-            // O Status (Verdadeiro ou Falso) vira texto e emoji
-            const statusTexto = task.completed ? "✅ Concluída" : "Pendente";
+            const dataCriacao = task.creation_date ? formatarDataHora(task.creation_date) : 'Desconhecida';
+            const dataEntrega = task.due_date ? formatarDataHora(task.due_date) : 'Sem prazo';
+            const statusTexto = task.completed ? "Concluída" : "Pendente";
 
-            // Preenchemos a "gaveta" usando innerHTML (injeta código HTML direto)
-            // A tag <span> serve para agrupar pequenos pedaços de texto na mesma linha
+            // Coloquei uns <br> nos títulos também para ficar tudo alinhado e bonito!
             detailsDiv.innerHTML = `
-                <span>Status: <strong>${statusTexto}</strong></span>
-                <span>Criada em: ${dataCriacao}</span>
-                <span>Para: ${dataEntrega}</span>
+                <span>Status:<br><strong>${statusTexto}</strong></span>
+                <span>Criada em:<br>${dataCriacao}</span>
+                <span>Para:<br>${dataEntrega}</span>
             `;
 
             const deleteBtn = document.createElement('button');
-            deleteBtn.textContent = 'Excluir';
+            deleteBtn.textContent = '🗑️ Excluir';
             deleteBtn.className = 'delete-btn';
-
             deleteBtn.onclick = () => deleteTask(task.id);
 
-            // 5. Montamos o Lego: Colocamos o título, descrição e detalhes DENTRO da caixa
-            li.appendChild(titleElement);
+            // 5. Montamos o Lego:
+            // Agora adicionamos o headerDiv em vez do titleElement solto!
+            li.appendChild(headerDiv); 
             li.appendChild(descElement);
             li.appendChild(detailsDiv);
             li.appendChild(deleteBtn);
 
-            // 6. Por fim, colocamos a caixa pronta na tela (dentro da tag <ul> do HTML)
             taskList.appendChild(li);
         });
+        
     } else {
         logout(); // Se o token estiver vencido, expulsa o usuário
     }
@@ -191,6 +208,39 @@ async function deleteTask(taskId) {
         } else {
             alert("Erro ao excluir a tarefa.");
         }
+    }
+}
+
+async function toggleTaskStatus(task) {
+    // 1. Invertemos o status atual (Se era false, vira true. Se era true, vira false)
+    const novoStatus = !task.completed;
+
+    // 2. Montamos o pacote para a sua rota PUT.
+    // Como o seu schemas.CreateTask no Python exige o título, nós mandamos o 
+    // título, descrição e data antigos, apenas mudando o campo "completed".
+    const payload = {
+        title: task.title,
+        description: task.description,
+        completed: novoStatus,
+        due_date: task.due_date 
+    };
+
+    // 3. Enviamos o PUT para a rota de edição passando o ID da tarefa
+    const response = await fetch(`${API_URL}/tasks/${task.id}`, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify(payload)
+    });
+
+    if (response.ok) {
+        // Se deu certo, recarregamos a lista para atualizar a cor e o riscado
+        loadTasks();
+    } else {
+        alert("Erro ao atualizar o status da tarefa.");
+        loadTasks(); // Recarrega para desmarcar o checkbox caso a API tenha falhado
     }
 }
 
