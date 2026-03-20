@@ -2,6 +2,8 @@
 
 Uma API de gerenciamento de tarefas (To-Do List) desenvolvida com FastAPI para colocar em prática conceitos de autenticação, segurança uso de API em Python.
 
+Com também um front-end simples para teste.
+
 ## Funcionalidades principais:
 
 - **Cadastro de Usuários:** Criação de conta com armazenamento de senhas com hashing
@@ -60,21 +62,32 @@ No Windows:
 pip install fastapi uvicorn pydantic sqlalchemy passlib "bcrypt==3.2.2" "python-jose[cryptography]" python-multipart python-dotenv
 ```
 
+Ou então usando o requirements:
+```bash
+pip install -r api/requirements.txt
+```
+
 **4. Configure as variáveis de ambiente:**
 
 Crie uma chave rodando esse comando no terminal:
 ```bash
 python -c "import secrets; print(secrets.token_hex(32))"
 ```
-Crie um arquivo chamado .env na pasta do projeto e adicione a chave 32 bytes criada dessa forma, sem espaço:
+Crie um arquivo chamado .env na pasta "api" do projeto (Junto dos códigos python) e adicione a chave 32 bytes criada dessa forma, sem espaço:
 SECRET_KEY="chave_32_bytes_criada"
+
+E Adicione também o método de encriptação assim, logo abaixo (Ao testar usei HS256):
+ALGORITHM_JWT=HS256
 
 **5. Inicie o servidor:**
 
-Rode no terminal:
+Rode no terminal indo pra subpasta da api e iniciando o servidor:
 ```bash
+cd api
 uvicorn main:app --reload
 ```
 
 E entre na documentação interativa do FastAPI para testar usando o link:
 http://127.0.0.1:8000/docs
+
+Ou teste usando o front-end criado, abrindo o html no seu navegador. Front-end com o JavaScript configurado para abrir a API de forma local (const API_URL = 'http://127.0.0.1:8000')

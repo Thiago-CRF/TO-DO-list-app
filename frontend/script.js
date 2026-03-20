@@ -1,4 +1,4 @@
-const API_URL = 'http://127.0.0.1:8000'; // http://127.0.0.1:8000 o local. e https://to-do-list-app-7q1n.onrender.com 
+const API_URL = 'http://127.0.0.1:8000'; // http://127.0.0.1:8000 o local. 
 
 let token = localStorage.getItem('token'); // Tenta pegar o token salvo
 
