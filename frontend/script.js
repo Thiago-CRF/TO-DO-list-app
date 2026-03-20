@@ -99,7 +99,7 @@ async function loadTasks() {
             `;
 
             const deleteBtn = document.createElement('button');
-            deleteBtn.textContent = '🗑️ Excluir';
+            deleteBtn.textContent = 'Excluir';
             deleteBtn.className = 'delete-btn';
             deleteBtn.onclick = () => deleteTask(task.id);
 

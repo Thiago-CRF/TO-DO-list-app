@@ -4,7 +4,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, declarative_base
 
 #muda dependendo do banco de dados usado
-SQLALCHEMY_DB_URL = "sqlite:///./todolist.db"
+SQLALCHEMY_DB_URL = "sqlite:///../todolist.db"
 
 # engine do banco de dados SQlite
 # check_same_thread: False, pra o FastAPI não ficar mais lento por conta do SQlite
